@@ -22,23 +22,7 @@
     "skipChecks": true
   },
   "hooks": {
-    "before:init": [
-      "npm run lint",
-      "npm run type-check"
-    ],
-    "before:release": [
-      "npm run build:electron"
-    ],
-    "after:release": [
-      "echo 🎉 Successfully released ${name} v${version}!",
-      "echo 📦 Download: ${repo.repository}/releases/tag/v${version}",
-      "echo 🔗 View release: ${releaseUrl}"
-    ]
+    "after:release": ["echo 🎉 Successfully released ${name} v${version}!"]
   },
-  "plugins": {
-    "@release-it/conventional-changelog": {
-      "preset": "angular",
-      "infile": "CHANGELOG.md"
-    }
-  }
+  "plugins": {}
 }
