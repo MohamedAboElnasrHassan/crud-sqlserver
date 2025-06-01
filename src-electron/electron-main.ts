@@ -3,7 +3,7 @@ import path from 'path';
 import os from 'os';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
-import { AutoUpdater, updaterAPI } from './auto-updater';
+import { smartAutoUpdater, updaterAPI } from './auto-updater';
 import { setupUTF8Encoding, setupConsoleUTF8, testArabicDisplay } from './encoding-setup';
 
 // إعداد ترميز UTF-8 للـ console في Windows
@@ -19,7 +19,7 @@ let mainWindow: BrowserWindow | undefined;
 let splashWindow: BrowserWindow | undefined;
 let databaseWindow: BrowserWindow | undefined;
 let connectionWindow: BrowserWindow | undefined;
-let autoUpdater: AutoUpdater | undefined;
+// نظام التحديث التلقائي سيتم تهيئته تلقائياً
 
 // نوع البيانات المسموح بها في سجلات Electron
 type ElectronLogData = Record<string, unknown> | string | number | boolean | null | undefined;
@@ -582,7 +582,7 @@ async function createMainWindow() {
 
     // تهيئة نظام التحديث التلقائي
     if (mainWindow) {
-      autoUpdater = new AutoUpdater(mainWindow);
+      smartAutoUpdater.setMainWindow(mainWindow);
       electronLogger.info('تم تهيئة نظام التحديث التلقائي');
     }
   });
@@ -591,10 +591,7 @@ async function createMainWindow() {
   mainWindow.on('closed', () => {
     electronLogger.info('تم إغلاق النافذة الرئيسية');
     // تنظيف نظام التحديث التلقائي
-    if (autoUpdater) {
-      autoUpdater.destroy();
-      autoUpdater = undefined;
-    }
+    smartAutoUpdater.destroy();
     mainWindow = undefined;
   });
 
