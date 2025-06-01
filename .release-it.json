@@ -3,18 +3,14 @@
   "git": {
     "commitMessage": "🚀 chore: release v${version}",
     "tagName": "v${version}",
-    "push": true,
+    "push": false,
     "commit": true,
     "tag": true,
     "requireCleanWorkingDir": true,
     "requireUpstream": false
   },
   "github": {
-    "release": true,
-    "releaseName": "🚀 Release v${version}",
-    "autoGenerate": true,
-    "draft": false,
-    "preRelease": false
+    "release": false
   },
   "npm": {
     "publish": false,
