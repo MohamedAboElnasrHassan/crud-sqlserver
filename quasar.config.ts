@@ -642,9 +642,11 @@ export default defineConfig((ctx) => {
 
         // Files to include in the build
         files: [
-          'dist/**/*',
-          'node_modules/**/*',
-          'package.json',
+          '**/*',
+          '!src/**/*',
+          '!src-electron/**/*',
+          '!build-resources/**/*',
+          '!dist/electron/**/*',
           '!**/node_modules/*/{CHANGELOG.md,README.md,README,readme.md,readme}',
           '!**/node_modules/*/{test,__tests__,tests,powered-test,example,examples}',
           '!**/node_modules/*.d.ts',
