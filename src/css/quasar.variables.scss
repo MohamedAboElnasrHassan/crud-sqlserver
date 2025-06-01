@@ -1,25 +1,52 @@
-// Quasar SCSS (& Sass) Variables
+// Quasar SCSS Variables - Windows Classic Theme
 // --------------------------------------------------
-// To customize the look and feel of this app, you can override
-// the Sass/SCSS variables found in Quasar's source Sass/SCSS files.
 
-// Check documentation for full list of Quasar variables
+// Brand Colors
+$primary: #0054e3;
+$secondary: #c0c0c0;
+$accent: #808080;
 
-// Your own variables (that are declared here) and Quasar's own
-// ones will be available out of the box in your .vue/.scss/.sass files
+$dark: #1d1d1d;
+$dark-page: #121212;
 
-// It's highly recommended to change the default colors
-// to match your app's branding.
-// Tip: Use the "Theme Builder" on Quasar's documentation website.
+$positive: #21ba45;
+$negative: #c10015;
+$info: #31ccec;
+$warning: #f2c037;
 
-$primary   : #1976D2;
-$secondary : #26A69A;
-$accent    : #9C27B0;
+// Windows Classic Colors
+$windows-classic-bg: #c0c0c0;
+$windows-classic-border: #808080;
+$windows-classic-dark-border: #404040;
+$windows-classic-light-border: #dfdfdf;
+$windows-classic-button-face: #c0c0c0;
+$windows-classic-button-shadow: #808080;
+$windows-classic-button-highlight: #ffffff;
+$windows-classic-text: #000000;
+$windows-classic-disabled-text: #808080;
 
-$dark      : #1D1D1D;
-$dark-page : #121212;
+// Typography
+$typography-font-family: 'MS Sans Serif', 'Tahoma', sans-serif;
+$body-font-size: 11px;
+$body-line-height: 1.2;
 
-$positive  : #21BA45;
-$negative  : #C10015;
-$info      : #31CCEC;
-$warning   : #F2C037;
+// Button customizations
+$button-border-radius: 0px;
+$button-padding: 2px 8px;
+$button-font-size: 11px;
+$button-line-height: 1.2;
+$button-font-weight: normal;
+$button-shadow: none;
+$button-shadow-active: none;
+
+// Field customizations
+$field-label-font-size: 11px;
+$field-bottom-font-size: 10px;
+
+// Generic border radius
+$generic-border-radius: 0px;
+
+// Input customizations
+$input-font-size: 11px;
+$input-text-color: $windows-classic-text;
+$input-label-color: $windows-classic-text;

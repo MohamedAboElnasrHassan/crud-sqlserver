@@ -1,0 +1,66 @@
+name: 🚀 Smart Auto Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to release (e.g., v1.0.0)'
+        required: true
+        default: 'v1.0.0'
+
+jobs:
+  release:
+    runs-on: ${{ matrix.os }}
+    
+    strategy:
+      matrix:
+        os: [windows-latest, macos-latest, ubuntu-latest]
+    
+    steps:
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v4
+        
+      - name: 🟢 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          
+      - name: 📦 Install Dependencies
+        run: npm ci
+        
+      - name: 🔍 Run Tests
+        run: |
+          npm run lint
+          npm run type-check
+          
+      - name: 🏗️ Build Application
+        run: npm run build:electron
+        
+      - name: 📱 Build & Release (Windows)
+        if: matrix.os == 'windows-latest'
+        run: npm run build:electron:publish
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: 🍎 Build & Release (macOS)
+        if: matrix.os == 'macos-latest'
+        run: npm run build:electron:publish
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: 🐧 Build & Release (Linux)
+        if: matrix.os == 'ubuntu-latest'
+        run: npm run build:electron:publish
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: 📋 Upload Build Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-${{ matrix.os }}
+          path: dist/electron/
+          retention-days: 30

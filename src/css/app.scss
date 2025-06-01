@@ -1,1 +1,7 @@
 // app global css in SCSS form
+
+// Import Windows Classic theme
+@import './windows-classic.scss';
+
+// Import custom animations
+@import './animations.scss';

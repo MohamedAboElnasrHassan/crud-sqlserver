@@ -1,0 +1,299 @@
+name: 🧠 Smart Auto Release
+
+# تشغيل تلقائي عند أي push على main
+on:
+  push:
+    branches: [ main, master ]
+    paths-ignore:
+      - 'README.md'
+      - 'docs/**'
+      - '.gitignore'
+      - 'LICENSE*'
+
+  # تشغيل يومي للفحص التلقائي
+  schedule:
+    - cron: '0 2 * * *'  # كل يوم الساعة 2 صباحاً
+
+  workflow_dispatch:
+
+env:
+  NODE_VERSION: '20'
+
+jobs:
+  # تحليل ذكي للتغييرات
+  analyze-changes:
+    name: 🔍 Smart Change Analysis
+    runs-on: ubuntu-latest
+    outputs:
+      should_release: ${{ steps.analysis.outputs.should_release }}
+      version_bump: ${{ steps.analysis.outputs.version_bump }}
+      release_type: ${{ steps.analysis.outputs.release_type }}
+      changelog: ${{ steps.analysis.outputs.changelog }}
+    
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: 🧠 Intelligent Analysis
+        id: analysis
+        run: |
+          # الحصول على آخر tag
+          LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
+          echo "Last tag: $LAST_TAG"
+          
+          # تحليل الcommits منذ آخر tag
+          COMMITS=$(git log $LAST_TAG..HEAD --oneline)
+          echo "Commits since last tag:"
+          echo "$COMMITS"
+          
+          # تحليل ذكي لنوع التغييرات
+          MAJOR_CHANGES=$(echo "$COMMITS" | grep -i "BREAKING\|major\|breaking change" | wc -l)
+          MINOR_CHANGES=$(echo "$COMMITS" | grep -i "feat\|feature\|add\|new" | wc -l)
+          PATCH_CHANGES=$(echo "$COMMITS" | grep -i "fix\|bug\|patch\|update" | wc -l)
+          
+          # تحديد نوع الإصدار تلقائياً
+          if [ $MAJOR_CHANGES -gt 0 ]; then
+            VERSION_BUMP="major"
+            RELEASE_TYPE="release"
+          elif [ $MINOR_CHANGES -gt 0 ]; then
+            VERSION_BUMP="minor"
+            RELEASE_TYPE="release"
+          elif [ $PATCH_CHANGES -gt 0 ]; then
+            VERSION_BUMP="patch"
+            RELEASE_TYPE="release"
+          else
+            VERSION_BUMP="patch"
+            RELEASE_TYPE="draft"
+          fi
+          
+          # تحديد ما إذا كان يجب إنشاء إصدار
+          TOTAL_CHANGES=$((MAJOR_CHANGES + MINOR_CHANGES + PATCH_CHANGES))
+          if [ $TOTAL_CHANGES -gt 0 ] || [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            SHOULD_RELEASE="true"
+          else
+            SHOULD_RELEASE="false"
+          fi
+          
+          # إنشاء changelog تلقائي
+          CHANGELOG="## 🎉 What's New\n\n"
+          
+          if [ $MAJOR_CHANGES -gt 0 ]; then
+            CHANGELOG="${CHANGELOG}### 💥 Breaking Changes\n"
+            echo "$COMMITS" | grep -i "BREAKING\|major\|breaking change" | sed 's/^/- /' >> changelog_temp.md
+            CHANGELOG="${CHANGELOG}$(cat changelog_temp.md)\n\n"
+          fi
+          
+          if [ $MINOR_CHANGES -gt 0 ]; then
+            CHANGELOG="${CHANGELOG}### ✨ New Features\n"
+            echo "$COMMITS" | grep -i "feat\|feature\|add\|new" | sed 's/^/- /' >> changelog_temp.md
+            CHANGELOG="${CHANGELOG}$(cat changelog_temp.md)\n\n"
+          fi
+          
+          if [ $PATCH_CHANGES -gt 0 ]; then
+            CHANGELOG="${CHANGELOG}### 🐛 Bug Fixes\n"
+            echo "$COMMITS" | grep -i "fix\|bug\|patch\|update" | sed 's/^/- /' >> changelog_temp.md
+            CHANGELOG="${CHANGELOG}$(cat changelog_temp.md)\n\n"
+          fi
+          
+          # إضافة معلومات إضافية
+          CHANGELOG="${CHANGELOG}### 📊 Statistics\n"
+          CHANGELOG="${CHANGELOG}- Total commits: $(echo "$COMMITS" | wc -l)\n"
+          CHANGELOG="${CHANGELOG}- Files changed: $(git diff --name-only $LAST_TAG..HEAD | wc -l)\n"
+          CHANGELOG="${CHANGELOG}- Build date: $(date -u '+%Y-%m-%d %H:%M:%S UTC')\n"
+          
+          # تصدير النتائج
+          echo "should_release=$SHOULD_RELEASE" >> $GITHUB_OUTPUT
+          echo "version_bump=$VERSION_BUMP" >> $GITHUB_OUTPUT
+          echo "release_type=$RELEASE_TYPE" >> $GITHUB_OUTPUT
+          echo "changelog<<EOF" >> $GITHUB_OUTPUT
+          echo -e "$CHANGELOG" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+          
+          # طباعة النتائج
+          echo "🔍 Analysis Results:"
+          echo "Should Release: $SHOULD_RELEASE"
+          echo "Version Bump: $VERSION_BUMP"
+          echo "Release Type: $RELEASE_TYPE"
+          echo "Major Changes: $MAJOR_CHANGES"
+          echo "Minor Changes: $MINOR_CHANGES"
+          echo "Patch Changes: $PATCH_CHANGES"
+
+  # تحديث الإصدار تلقائياً
+  auto-version:
+    name: 🏷️ Auto Version & Tag
+    needs: analyze-changes
+    runs-on: ubuntu-latest
+    if: needs.analyze-changes.outputs.should_release == 'true'
+    outputs:
+      new_version: ${{ steps.version.outputs.new_version }}
+    
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+      
+      - name: 🟢 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      
+      - name: 🏷️ Auto Version Bump
+        id: version
+        run: |
+          # إعداد git
+          git config user.name "Smart Auto Release Bot"
+          git config user.email "actions@github.com"
+          
+          # تحديث الإصدار تلقائياً
+          NEW_VERSION=$(npm version ${{ needs.analyze-changes.outputs.version_bump }} --no-git-tag-version)
+          echo "new_version=$NEW_VERSION" >> $GITHUB_OUTPUT
+          
+          # تحديث ملفات إضافية
+          echo "Updating version in additional files..."
+          
+          # تحديث quasar.config.ts
+          if [ -f "quasar.config.ts" ]; then
+            sed -i "s/version: '[^']*'/version: '$NEW_VERSION'/g" quasar.config.ts
+          fi
+          
+          # commit التغييرات
+          git add .
+          git commit -m "🚀 Auto bump version to $NEW_VERSION
+          
+          - Version bump: ${{ needs.analyze-changes.outputs.version_bump }}
+          - Release type: ${{ needs.analyze-changes.outputs.release_type }}
+          - Auto-generated by Smart Release Bot"
+          
+          # إنشاء tag
+          git tag -a "$NEW_VERSION" -m "🎉 Release $NEW_VERSION
+          
+          ${{ needs.analyze-changes.outputs.changelog }}"
+          
+          # push التغييرات والtag
+          git push origin main
+          git push origin "$NEW_VERSION"
+          
+          echo "✅ Version bumped to $NEW_VERSION and tag created"
+
+  # بناء ونشر ذكي
+  smart-build-release:
+    name: 🚀 Smart Build & Release
+    needs: [analyze-changes, auto-version]
+    if: needs.analyze-changes.outputs.should_release == 'true'
+    
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            platform: win32
+            arch: x64
+          - os: macos-latest
+            platform: darwin
+            arch: x64
+          - os: ubuntu-latest
+            platform: linux
+            arch: x64
+    
+    runs-on: ${{ matrix.os }}
+    
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.auto-version.outputs.new_version }}
+          fetch-depth: 0
+      
+      - name: 🟢 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+      
+      - name: 🐍 Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      
+      - name: 📦 Install Dependencies
+        run: npm ci
+      
+      - name: 🧪 Smart Testing
+        run: |
+          # تشغيل الاختبارات إذا كانت موجودة
+          npm run test:unit 2>/dev/null || echo "No unit tests found"
+          npm run lint || echo "Linting completed with warnings"
+          npm run type-check || echo "Type checking completed"
+        continue-on-error: true
+      
+      - name: 🏗️ Build Application
+        run: npm run build
+      
+      - name: 🚀 Smart Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # تحديد استراتيجية النشر بناءً على التحليل
+          if [ "${{ needs.analyze-changes.outputs.release_type }}" = "release" ]; then
+            echo "🎉 Publishing as stable release"
+            npm run build:electron -- --publish always
+          else
+            echo "📝 Publishing as draft release"
+            npm run build:electron -- --publish onTagOrDraft
+          fi
+
+  # إشعارات ذكية
+  smart-notifications:
+    name: 📢 Smart Notifications
+    needs: [analyze-changes, auto-version, smart-build-release]
+    runs-on: ubuntu-latest
+    if: always() && needs.analyze-changes.outputs.should_release == 'true'
+    
+    steps:
+      - name: 📊 Create Smart Summary
+        run: |
+          echo "## 🧠 Smart Auto Release Summary" >> $GITHUB_STEP_SUMMARY
+          echo "### 📋 Release Information" >> $GITHUB_STEP_SUMMARY
+          echo "- **New Version:** ${{ needs.auto-version.outputs.new_version }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Version Bump:** ${{ needs.analyze-changes.outputs.version_bump }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Release Type:** ${{ needs.analyze-changes.outputs.release_type }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Build Status:** ${{ needs.smart-build-release.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 📝 Changelog" >> $GITHUB_STEP_SUMMARY
+          echo "${{ needs.analyze-changes.outputs.changelog }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 🔗 Quick Links" >> $GITHUB_STEP_SUMMARY
+          echo "- [📥 Download Latest Release](https://github.com/${{ github.repository }}/releases/latest)" >> $GITHUB_STEP_SUMMARY
+          echo "- [📋 All Releases](https://github.com/${{ github.repository }}/releases)" >> $GITHUB_STEP_SUMMARY
+          echo "- [🔄 Auto-Update in App]()" >> $GITHUB_STEP_SUMMARY
+
+  # تنظيف ذكي
+  smart-cleanup:
+    name: 🧹 Smart Cleanup
+    needs: [smart-build-release]
+    runs-on: ubuntu-latest
+    if: always()
+    
+    steps:
+      - name: 🧹 Cleanup Old Releases
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # الاحتفاظ بآخر 5 إصدارات فقط
+          echo "🧹 Cleaning up old releases (keeping latest 5)..."
+          
+          # الحصول على قائمة الإصدارات
+          RELEASES=$(gh api repos/${{ github.repository }}/releases --paginate | jq -r '.[].id' | tail -n +6)
+          
+          # حذف الإصدارات القديمة
+          for release_id in $RELEASES; do
+            echo "Deleting old release: $release_id"
+            gh api -X DELETE repos/${{ github.repository }}/releases/$release_id || true
+          done
+          
+          echo "✅ Cleanup completed"

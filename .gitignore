@@ -1,33 +1,99 @@
+# 🧹 CRUD SQL Server - Git Ignore File
+
+# ===== Operating System =====
 .DS_Store
 .thumbs.db
-node_modules
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
 
-# Quasar core related directories
-.quasar
-/dist
-/quasar.config.*.temporary.compiled*
-
-# Cordova related directories and files
-/src-cordova/node_modules
-/src-cordova/platforms
-/src-cordova/plugins
-/src-cordova/www
-
-# Capacitor related directories and files
-/src-capacitor/www
-/src-capacitor/node_modules
-
-# Log files
+# ===== Node.js =====
+node_modules/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+lerna-debug.log*
+.npm
+.yarn-integrity
+.pnpm-debug.log*
 
-# Editor directories and files
-.idea
+# ===== Quasar Framework =====
+.quasar/
+/dist/
+/quasar.config.*.temporary.compiled*
+
+# ===== Cordova =====
+/src-cordova/node_modules/
+/src-cordova/platforms/
+/src-cordova/plugins/
+/src-cordova/www/
+
+# ===== Capacitor =====
+/src-capacitor/www/
+/src-capacitor/node_modules/
+
+# ===== Electron =====
+/dist-electron/
+*.electron-cache/
+.electron-builder-cache/
+
+# ===== Environment Variables =====
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env.*.local
+
+# ===== IDE & Editors =====
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
+*.sw?
 
-# local .env files
-.env.local*
+# ===== Build & Cache =====
+*.tgz
+*.tar.gz
+.cache/
+.temp/
+.tmp/
+coverage/
+.nyc_output/
+
+# ===== TypeScript =====
+*.tsbuildinfo
+
+# ===== Logs =====
+logs/
+*.log
+
+# ===== Database =====
+*.db
+*.sqlite
+*.sqlite3
+
+# ===== Certificates & Keys =====
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+
+# ===== Auto-generated =====
+auto-imports.d.ts
+components.d.ts
+
+# ===== Smart Release =====
+.smart-release-cache/
+release-notes-temp.md

@@ -1,0 +1,32 @@
+{
+  "enabled": true,
+  "autoDownload": true,
+  "autoInstallOnAppQuit": true,
+  "checkForUpdatesOnStart": true,
+  "checkInterval": 3600000,
+  "allowPrerelease": false,
+  "showNotifications": true,
+  "language": "ar",
+  "messages": {
+    "ar": {
+      "checking": "جاري البحث عن تحديثات...",
+      "updateAvailable": "يتوفر تحديث جديد",
+      "updateNotAvailable": "التطبيق محدث",
+      "downloadProgress": "جاري تحميل التحديث...",
+      "updateDownloaded": "تم تحميل التحديث",
+      "installNow": "تثبيت الآن",
+      "installLater": "تثبيت لاحقاً",
+      "error": "خطأ في التحديث"
+    },
+    "en": {
+      "checking": "Checking for updates...",
+      "updateAvailable": "Update available",
+      "updateNotAvailable": "App is up to date",
+      "downloadProgress": "Downloading update...",
+      "updateDownloaded": "Update downloaded",
+      "installNow": "Install now",
+      "installLater": "Install later",
+      "error": "Update error"
+    }
+  }
+}

@@ -1,0 +1,190 @@
+// Windows Classic Theme CSS
+// --------------------------------------------------
+
+// Import Quasar variables
+@import './quasar.variables.scss';
+
+// Windows Classic Mixins
+@mixin windows-classic-border($type: 'outset') {
+  @if $type == 'outset' {
+    border: 1px solid;
+    border-color: $windows-classic-light-border
+      $windows-classic-dark-border
+      $windows-classic-dark-border
+      $windows-classic-light-border;
+  } @else if $type == 'inset' {
+    border: 1px solid;
+    border-color: $windows-classic-dark-border
+      $windows-classic-light-border
+      $windows-classic-light-border
+      $windows-classic-dark-border;
+  } @else {
+    border: 1px solid $windows-classic-border;
+  }
+}
+
+@mixin windows-classic-button {
+  @include windows-classic-border('outset');
+  background: $windows-classic-button-face;
+  color: $windows-classic-text;
+  font-family: $typography-font-family;
+  font-size: $button-font-size;
+  font-weight: $button-font-weight;
+  border-radius: 0;
+  padding: $button-padding;
+
+  &:hover {
+    background: #d4d0c8; // Lighter version of $windows-classic-button-face
+  }
+
+  &:active,
+  &.q-btn--active {
+    @include windows-classic-border('inset');
+  }
+
+  &:disabled {
+    color: $windows-classic-disabled-text;
+    background: $windows-classic-button-face;
+  }
+}
+
+@mixin windows-classic-input {
+  @include windows-classic-border('inset');
+  background: white;
+  color: $windows-classic-text;
+  font-family: $typography-font-family;
+  font-size: $input-font-size;
+  border-radius: 0;
+
+  &:focus {
+    outline: none;
+    border-color: $windows-classic-dark-border $windows-classic-light-border
+      $windows-classic-light-border $windows-classic-dark-border;
+  }
+}
+
+// Global Windows Classic Styles
+.windows-classic-theme {
+  font-family: $typography-font-family;
+  font-size: $body-font-size;
+  line-height: $body-line-height;
+  background: $windows-classic-bg;
+  color: $windows-classic-text;
+
+  // Remove all border radius
+  * {
+    border-radius: 0 !important;
+  }
+
+  // Button styles
+  .q-btn {
+    @include windows-classic-button;
+
+    // Remove Quasar's default styles
+    box-shadow: none !important;
+    text-transform: none !important;
+
+    .q-btn__content {
+      font-weight: normal;
+    }
+  }
+
+  // Input field styles
+  .q-field {
+    .q-field__control {
+      @include windows-classic-input;
+      min-height: 21px;
+      height: 21px;
+      padding: 2px 4px;
+    }
+
+    .q-field__native {
+      font-size: $input-font-size;
+      padding: 0;
+      min-height: 17px;
+      line-height: 17px;
+    }
+
+    .q-field__label {
+      font-size: $field-label-font-size;
+      color: $windows-classic-text;
+      font-weight: normal;
+    }
+
+    // Remove Quasar's focus styles
+    &.q-field--focused .q-field__control {
+      box-shadow: none !important;
+    }
+  }
+
+  // Select dropdown styles
+  .q-select {
+    .q-field__append {
+      .q-icon {
+        font-size: 12px;
+        color: $windows-classic-text;
+      }
+    }
+  }
+
+  // Menu styles
+  .q-menu {
+    @include windows-classic-border();
+    background: white;
+    box-shadow: none !important;
+
+    .q-item {
+      font-size: $input-font-size;
+      font-family: $typography-font-family;
+      padding: 2px 8px;
+      min-height: 18px;
+
+      &:hover {
+        background: $primary;
+        color: white;
+      }
+    }
+  }
+
+  // Checkbox styles
+  .q-checkbox {
+    .q-checkbox__inner {
+      @include windows-classic-border('inset');
+      background: white;
+      width: 13px;
+      height: 13px;
+
+      .q-checkbox__bg {
+        display: none;
+      }
+
+      .q-checkbox__svg {
+        width: 11px;
+        height: 11px;
+        color: $windows-classic-text;
+      }
+    }
+
+    .q-checkbox__label {
+      font-size: $input-font-size;
+      font-family: $typography-font-family;
+      color: $windows-classic-text;
+    }
+  }
+
+  // Progress bar styles
+  .q-linear-progress {
+    @include windows-classic-border('inset');
+    background: white;
+    height: 16px;
+
+    .q-linear-progress__track {
+      background: $primary;
+    }
+  }
+
+  // Spinner styles
+  .q-spinner {
+    color: $primary;
+  }
+}
