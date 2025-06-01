@@ -12,7 +12,6 @@
   "github": {
     "release": true,
     "releaseName": "🚀 Release v${version}",
-    "releaseNotes": "git log --pretty=format:\"* %s (%h)\" ${from}...${to}",
     "autoGenerate": true,
     "draft": false,
     "preRelease": false
