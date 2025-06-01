@@ -133,6 +133,8 @@ export default defineConfig((ctx) => {
           ...viteConf.optimizeDeps,
           include: ['vue', 'vue-router', 'pinia', 'vue-i18n', 'axios', 'quasar'],
         };
+
+        // Configure SCSS variables (removed to avoid conflicts)
       },
 
       // Vite plugins
@@ -681,7 +683,6 @@ export default defineConfig((ctx) => {
             },
           ],
           icon: 'src-electron/icons/icon.ico',
-          publisherName: 'Mohamed Software Solutions',
           verifyUpdateCodeSignature: false,
           requestedExecutionLevel: 'asInvoker',
         },

@@ -776,17 +776,19 @@ onMounted(() => {
 <style lang="scss" scoped>
 // استخدام متغيرات Quasar
 .zatca-settings-page {
-  padding: $space-lg;
+  padding: 24px;
   background: var(--q-color-background);
   min-height: 100vh;
 }
 
 .zatca-header {
-  margin-bottom: $space-xl;
-  padding: $space-lg;
+  margin-bottom: 32px;
+  padding: 24px;
   background: var(--q-color-surface);
   border-radius: 12px;
-  box-shadow: $shadow-3;
+  box-shadow:
+    0 10px 20px rgba(0, 0, 0, 0.19),
+    0 6px 6px rgba(0, 0, 0, 0.23);
   border: 1px solid var(--q-color-separator);
 }
 
@@ -801,14 +803,18 @@ onMounted(() => {
 .stats-card,
 .actions-card {
   border-radius: 12px;
-  box-shadow: $shadow-2;
+  box-shadow:
+    0 3px 6px rgba(0, 0, 0, 0.16),
+    0 3px 6px rgba(0, 0, 0, 0.23);
   background: var(--q-color-surface);
   border: 1px solid var(--q-color-separator);
   transition: all 0.3s ease;
 
   &:hover {
     transform: translateY(-2px);
-    box-shadow: $shadow-6;
+    box-shadow:
+      0 25px 50px rgba(0, 0, 0, 0.35),
+      0 20px 20px rgba(0, 0, 0, 0.25);
   }
 }
 
@@ -818,14 +824,14 @@ onMounted(() => {
   font-size: 0.875rem;
 
   .q-icon {
-    margin-right: $space-xs;
+    margin-right: 4px;
   }
 }
 
 // مجموعة خيارات البيئة
 .environment-group {
   .q-radio {
-    margin-bottom: $space-sm;
+    margin-bottom: 8px;
 
     .q-radio__label {
       font-weight: 500;
@@ -868,7 +874,7 @@ onMounted(() => {
 // معلومات الاتصال
 .connection-info {
   .q-item {
-    padding: $space-sm $space-md;
+    padding: 8px 16px;
 
     .q-item-section--avatar {
       min-width: 40px;
@@ -880,11 +886,11 @@ onMounted(() => {
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: $space-md;
+  gap: 16px;
 
   .stat-item {
     text-align: center;
-    padding: $space-md;
+    padding: 16px;
     background: rgba(var(--q-color-primary-rgb), 0.05);
     border-radius: 8px;
     transition: all 0.3s ease;
@@ -897,7 +903,7 @@ onMounted(() => {
     .stat-value {
       font-size: 1.5rem;
       font-weight: 700;
-      margin-bottom: $space-xs;
+      margin-bottom: 4px;
     }
 
     .stat-label {
@@ -932,21 +938,21 @@ onMounted(() => {
 // تحسينات للشاشات الصغيرة
 @media (max-width: 768px) {
   .zatca-settings-page {
-    padding: $space-md;
+    padding: 16px;
   }
 
   .zatca-header {
-    padding: $space-md;
+    padding: 16px;
 
     .row {
       flex-direction: column;
-      gap: $space-md;
+      gap: 16px;
     }
   }
 
   .company-form .row {
     flex-direction: column;
-    gap: $space-sm;
+    gap: 8px;
   }
 
   .stats-grid {
@@ -957,7 +963,7 @@ onMounted(() => {
     flex-direction: column;
 
     .q-radio {
-      margin-bottom: $space-sm;
+      margin-bottom: 8px;
     }
   }
 }
@@ -1006,7 +1012,9 @@ body.body--dark {
 
   &:hover {
     transform: translateY(-2px);
-    box-shadow: $shadow-4;
+    box-shadow:
+      0 14px 28px rgba(0, 0, 0, 0.25),
+      0 10px 10px rgba(0, 0, 0, 0.22);
   }
 }
 
@@ -1023,7 +1031,9 @@ body.body--dark {
 
     &.q-field--focused {
       transform: translateY(-2px);
-      box-shadow: $shadow-2;
+      box-shadow:
+        0 3px 6px rgba(0, 0, 0, 0.16),
+        0 3px 6px rgba(0, 0, 0, 0.23);
     }
   }
 }
@@ -1053,7 +1063,9 @@ body.body--dark {
 // تحسينات الحوارات
 .q-dialog .q-card {
   border-radius: 12px;
-  box-shadow: $shadow-8;
+  box-shadow:
+    0 30px 60px rgba(0, 0, 0, 0.4),
+    0 25px 25px rgba(0, 0, 0, 0.3);
 
   .q-card-section {
     .text-h6 {
@@ -1067,7 +1079,7 @@ body.body--dark {
 .q-list {
   .q-item {
     border-radius: 8px;
-    margin-bottom: $space-xs;
+    margin-bottom: 4px;
 
     &:last-child {
       margin-bottom: 0;

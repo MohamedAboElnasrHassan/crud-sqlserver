@@ -50,3 +50,6 @@ $generic-border-radius: 0px;
 $input-font-size: 11px;
 $input-text-color: $windows-classic-text;
 $input-label-color: $windows-classic-text;
+
+// Note: Removed custom spacing and shadow variables to avoid conflicts with Quasar
+// Use direct values in components instead

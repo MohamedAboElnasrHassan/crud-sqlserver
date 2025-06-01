@@ -803,17 +803,19 @@ onMounted(() => {
 <style lang="scss" scoped>
 // استخدام متغيرات Quasar
 .settings-page {
-  padding: $space-lg;
+  padding: 24px;
   background: var(--q-color-background);
   min-height: 100vh;
 }
 
 .settings-header {
-  margin-bottom: $space-xl;
-  padding: $space-lg;
+  margin-bottom: 32px;
+  padding: 24px;
   background: var(--q-color-surface);
-  border-radius: $border-radius-lg;
-  box-shadow: $shadow-3;
+  border-radius: 12px;
+  box-shadow:
+    0 10px 20px rgba(0, 0, 0, 0.19),
+    0 6px 6px rgba(0, 0, 0, 0.23);
   border: 1px solid var(--q-color-separator);
 }
 
@@ -823,15 +825,19 @@ onMounted(() => {
 }
 
 .settings-card {
-  border-radius: $border-radius-lg;
-  box-shadow: $shadow-2;
+  border-radius: 12px;
+  box-shadow:
+    0 3px 6px rgba(0, 0, 0, 0.16),
+    0 3px 6px rgba(0, 0, 0, 0.23);
   transition: all 0.3s ease;
   background: var(--q-color-surface);
   border: 1px solid var(--q-color-separator);
 
   &:hover {
     transform: translateY(-2px);
-    box-shadow: $shadow-6;
+    box-shadow:
+      0 19px 38px rgba(0, 0, 0, 0.3),
+      0 15px 12px rgba(0, 0, 0, 0.22);
   }
 }
 
@@ -840,7 +846,7 @@ onMounted(() => {
   .theme-section {
     .theme-mode-group {
       .q-radio {
-        margin-bottom: $space-sm;
+        margin-bottom: 8px;
       }
     }
 
@@ -858,14 +864,16 @@ onMounted(() => {
 
         &:hover {
           transform: scale(1.05);
-          box-shadow: $shadow-4;
+          box-shadow:
+            0 14px 28px rgba(0, 0, 0, 0.25),
+            0 10px 10px rgba(0, 0, 0, 0.22);
         }
       }
     }
 
     .advanced-theme {
       background: rgba(var(--q-color-primary-rgb), 0.05);
-      border-radius: $border-radius;
+      border-radius: 8px;
     }
   }
 }
@@ -873,7 +881,7 @@ onMounted(() => {
 // تحسينات اللغة
 .language-section {
   .language-list {
-    border-radius: $border-radius;
+    border-radius: 8px;
     overflow: hidden;
 
     .q-item {
@@ -904,15 +912,15 @@ onMounted(() => {
 // تحسينات للشاشات الصغيرة
 @media (max-width: 768px) {
   .settings-page {
-    padding: $space-md;
+    padding: 16px;
   }
 
   .settings-header {
-    padding: $space-md;
+    padding: 16px;
 
     .row {
       flex-direction: column;
-      gap: $space-md;
+      gap: 16px;
     }
   }
 
@@ -974,7 +982,9 @@ body.body--dark {
 
   &:hover {
     transform: translateY(-2px);
-    box-shadow: $shadow-4;
+    box-shadow:
+      0 14px 28px rgba(0, 0, 0, 0.25),
+      0 10px 10px rgba(0, 0, 0, 0.22);
   }
 }
 </style>

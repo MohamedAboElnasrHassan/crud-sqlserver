@@ -35,7 +35,32 @@ interface ElectronAPI {
     message?: string;
   }>;
 
-  // Auto-updater methods
+  // Auto-updater methods (direct access)
+  checkForUpdates: () => Promise<{
+    success: boolean;
+    message?: string;
+  }>;
+
+  downloadUpdate: () => Promise<{
+    success: boolean;
+    message?: string;
+  }>;
+
+  installUpdate: () => Promise<{
+    success: boolean;
+    message?: string;
+  }>;
+
+  getVersion: () => Promise<{
+    success: boolean;
+    version?: string;
+    message?: string;
+  }>;
+
+  onUpdateEvent: (callback: (data: unknown) => void) => () => void;
+  removeUpdateListeners: () => void;
+
+  // Auto-updater methods (nested for compatibility)
   updater: {
     checkForUpdates: () => Promise<{
       success: boolean;

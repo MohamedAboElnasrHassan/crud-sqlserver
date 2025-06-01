@@ -53,7 +53,11 @@
             class="q-mb-md"
           >
             <div class="absolute-full flex flex-center">
-              <q-badge color="white" text-color="primary" :label="`${Math.round(downloadProgress)}%`" />
+              <q-badge
+                color="white"
+                text-color="primary"
+                :label="`${Math.round(downloadProgress)}%`"
+              />
             </div>
           </q-linear-progress>
           <div class="text-caption text-center">
@@ -112,7 +116,7 @@
           :label="$t('updater.downloadNow')"
           @click="downloadUpdate"
         />
-        
+
         <q-btn
           v-if="updateState === 'downloaded'"
           flat
@@ -125,14 +129,14 @@
           :label="$t('updater.installNow')"
           @click="installUpdate"
         />
-        
+
         <q-btn
           v-if="updateState === 'error'"
           flat
           :label="$t('updater.retry')"
           @click="retryUpdate"
         />
-        
+
         <q-btn
           v-if="['not-available', 'error'].includes(updateState)"
           color="primary"
@@ -165,7 +169,9 @@ interface ProgressInfo {
 // المتغيرات التفاعلية
 const { t } = useI18n();
 const showDialog = ref(false);
-const updateState = ref<'checking' | 'available' | 'downloading' | 'downloaded' | 'error' | 'not-available'>('checking');
+const updateState = ref<
+  'checking' | 'available' | 'downloading' | 'downloaded' | 'error' | 'not-available'
+>('checking');
 const updateInfo = ref<UpdateInfo | null>(null);
 const downloadProgress = ref(0);
 const downloadedBytes = ref(0);
@@ -175,13 +181,20 @@ const errorMessage = ref('');
 // الدوال المحسوبة
 const getTitle = computed(() => {
   switch (updateState.value) {
-    case 'checking': return t('updater.checking');
-    case 'available': return t('updater.updateAvailable');
-    case 'downloading': return t('updater.downloadProgress');
-    case 'downloaded': return t('updater.updateDownloaded');
-    case 'error': return t('updater.error');
-    case 'not-available': return t('updater.updateNotAvailable');
-    default: return t('updater.checking');
+    case 'checking':
+      return t('updater.checking');
+    case 'available':
+      return t('updater.updateAvailable');
+    case 'downloading':
+      return t('updater.downloadProgress');
+    case 'downloaded':
+      return t('updater.updateDownloaded');
+    case 'error':
+      return t('updater.error');
+    case 'not-available':
+      return t('updater.updateNotAvailable');
+    default:
+      return t('updater.checking');
   }
 });
 
@@ -221,7 +234,7 @@ const skipVersion = () => {
 
 const remindLater = () => {
   // تذكير لاحقاً
-  const remindTime = Date.now() + (24 * 60 * 60 * 1000); // 24 ساعة
+  const remindTime = Date.now() + 24 * 60 * 60 * 1000; // 24 ساعة
   localStorage.setItem('remindLaterTime', remindTime.toString());
   closeDialog();
 };
@@ -232,42 +245,49 @@ const retryUpdate = () => {
 };
 
 // معالج أحداث التحديث
-const handleUpdateEvent = (event: any) => {
-  const { type, data } = event;
-  
+const handleUpdateEvent = (event: unknown) => {
+  const eventData = event as { type: string; data: unknown };
+  const { type, data } = eventData;
+
   switch (type) {
-    case 'update-checking':
+    case 'update-checking': {
       updateState.value = 'checking';
       showDialog.value = true;
       break;
-      
-    case 'update-available':
-      updateInfo.value = data;
+    }
+
+    case 'update-available': {
+      updateInfo.value = data as UpdateInfo;
       updateState.value = 'available';
       showDialog.value = true;
       break;
-      
-    case 'update-not-available':
+    }
+
+    case 'update-not-available': {
       updateState.value = 'not-available';
       showDialog.value = true;
       break;
-      
-    case 'download-progress':
+    }
+
+    case 'download-progress': {
       const progress = data as ProgressInfo;
       downloadProgress.value = progress.percent;
       downloadedBytes.value = progress.transferred;
       totalBytes.value = progress.total;
       break;
-      
-    case 'update-downloaded':
+    }
+
+    case 'update-downloaded': {
       updateState.value = 'downloaded';
       break;
-      
-    case 'update-error':
+    }
+
+    case 'update-error': {
       updateState.value = 'error';
-      errorMessage.value = data;
+      errorMessage.value = data as string;
       showDialog.value = true;
       break;
+    }
   }
 };
 
@@ -288,7 +308,7 @@ defineExpose({
     updateState.value = 'checking';
     showDialog.value = true;
     window.electronAPI?.checkForUpdates();
-  }
+  },
 });
 </script>
 

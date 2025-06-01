@@ -805,7 +805,7 @@ body.body--dark {
   }
 
   pre {
-    background: lighten(var(--q-color-dark), 5%);
+    background: #2a2a2a;
     border: 1px solid var(--q-color-separator);
   }
 }

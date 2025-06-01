@@ -207,11 +207,7 @@ onMounted(() => {
 // استخدام متغيرات Quasar
 .error-page {
   min-height: 100vh;
-  background: linear-gradient(
-    135deg,
-    var(--q-color-primary) 0%,
-    darken(var(--q-color-primary), 20%) 100%
-  );
+  background: linear-gradient(135deg, var(--q-color-primary) 0%, #1976d2 100%);
   overflow: hidden;
   position: relative;
 }
@@ -443,11 +439,7 @@ onMounted(() => {
 // تحسينات للوضع المظلم
 body.body--dark {
   .error-page {
-    background: linear-gradient(
-      135deg,
-      var(--q-color-dark) 0%,
-      darken(var(--q-color-dark), 10%) 100%
-    );
+    background: linear-gradient(135deg, var(--q-color-dark) 0%, #1e1e1e 100%);
   }
 
   .shape {
