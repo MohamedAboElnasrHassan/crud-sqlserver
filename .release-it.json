@@ -1,0 +1,44 @@
+{
+  "$schema": "https://unpkg.com/release-it@19/schema/release-it.json",
+  "git": {
+    "commitMessage": "🚀 chore: release v${version}",
+    "tagName": "v${version}",
+    "push": true,
+    "commit": true,
+    "tag": true,
+    "requireCleanWorkingDir": true,
+    "requireUpstream": false
+  },
+  "github": {
+    "release": true,
+    "releaseName": "🚀 Release v${version}",
+    "releaseNotes": "git log --pretty=format:\"* %s (%h)\" ${from}...${to}",
+    "autoGenerate": true,
+    "draft": false,
+    "preRelease": false
+  },
+  "npm": {
+    "publish": false,
+    "skipChecks": true
+  },
+  "hooks": {
+    "before:init": [
+      "npm run lint",
+      "npm run type-check"
+    ],
+    "before:release": [
+      "npm run build:electron"
+    ],
+    "after:release": [
+      "echo 🎉 Successfully released ${name} v${version}!",
+      "echo 📦 Download: ${repo.repository}/releases/tag/v${version}",
+      "echo 🔗 View release: ${releaseUrl}"
+    ]
+  },
+  "plugins": {
+    "@release-it/conventional-changelog": {
+      "preset": "angular",
+      "infile": "CHANGELOG.md"
+    }
+  }
+}
