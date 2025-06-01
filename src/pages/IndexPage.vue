@@ -67,6 +67,11 @@
             <q-icon name="dashboard" size="80px" color="primary" class="q-mb-md" />
             <div class="text-h5 text-weight-bold q-mb-sm">{{ $t('admin.welcome') }}</div>
             <div class="text-body1 text-grey-6">{{ $t('admin.welcome_message') }}</div>
+            <div class="q-mt-md">
+              <q-chip color="positive" text-color="white" icon="system_update" size="md">
+                🎉 الإصدار الجديد v1.1.11 - تم تفعيل نظام التحديث التلقائي!
+              </q-chip>
+            </div>
           </q-card-section>
         </q-card>
       </div>
